@@ -1,5 +1,7 @@
-const Comment = require('../models/Comment');
-const Post = require('../models/Post');
+const Comment = require("../models/Comment");
+const Post = require("../models/Post");
+
+const User = require("../models/User");
 
 // @desc    Get comments for a post
 // @route   GET /api/v1/posts/:postId/comments
@@ -9,19 +11,19 @@ exports.getComments = async (req, res) => {
     const comments = await Comment.find({
       post: req.params.postId,
       parentComment: null,
-      status: 'active'
+      status: "active",
     })
-      .populate('author', 'name avatar')
+      .populate("author", "name avatar")
       .sort({ createdAt: -1 });
 
     res.status(200).json({
       success: true,
-      data: comments
+      data: comments,
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -38,24 +40,24 @@ exports.createComment = async (req, res) => {
     if (!post) {
       return res.status(404).json({
         success: false,
-        message: 'Post not found'
+        message: "Post not found",
       });
     }
 
     const comment = await Comment.create(req.body);
-    
+
     // Populate author information
-    await comment.populate('author', 'name');
+    await comment.populate("author", "name");
 
     res.status(201).json({
       success: true,
-      data: comment
+      data: comment,
     });
   } catch (error) {
-    console.error('Error creating comment:', error);
+    console.error("Error creating comment:", error);
     res.status(500).json({
       success: false,
-      message: 'Error creating comment'
+      message: "Error creating comment",
     });
   }
 };
@@ -70,31 +72,34 @@ exports.updateComment = async (req, res) => {
     if (!comment) {
       return res.status(404).json({
         success: false,
-        message: 'Comment not found'
+        message: "Comment not found",
       });
     }
 
     // Make sure user is comment owner or admin
-    if (comment.author.toString() !== req.user.id && req.user.role !== 'admin') {
+    if (
+      comment.author.toString() !== req.user.id &&
+      req.user.role !== "admin"
+    ) {
       return res.status(401).json({
         success: false,
-        message: 'Not authorized to update this comment'
+        message: "Not authorized to update this comment",
       });
     }
 
     comment = await Comment.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
-      runValidators: true
-    }).populate('author', 'name avatar');
+      runValidators: true,
+    }).populate("author", "name avatar");
 
     res.status(200).json({
       success: true,
-      data: comment
+      data: comment,
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -109,15 +114,18 @@ exports.deleteComment = async (req, res) => {
     if (!comment) {
       return res.status(404).json({
         success: false,
-        message: 'Comment not found'
+        message: "Comment not found",
       });
     }
 
     // Make sure user owns comment or is admin
-    if (comment.author.toString() !== req.user.id && req.user.role !== 'admin') {
+    if (
+      comment.author.toString() !== req.user.id &&
+      req.user.role !== "admin"
+    ) {
       return res.status(401).json({
         success: false,
-        message: 'Not authorized to delete this comment'
+        message: "Not authorized to delete this comment",
       });
     }
 
@@ -125,13 +133,13 @@ exports.deleteComment = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: 'Comment deleted successfully'
+      message: "Comment deleted successfully",
     });
   } catch (error) {
-    console.error('Error deleting comment:', error);
+    console.error("Error deleting comment:", error);
     res.status(500).json({
       success: false,
-      message: 'Error deleting comment'
+      message: "Error deleting comment",
     });
   }
 };
@@ -146,7 +154,7 @@ exports.likeComment = async (req, res) => {
     if (!comment) {
       return res.status(404).json({
         success: false,
-        message: 'Comment not found'
+        message: "Comment not found",
       });
     }
 
@@ -155,7 +163,9 @@ exports.likeComment = async (req, res) => {
 
     if (isLiked) {
       // Unlike
-      comment.likes = comment.likes.filter(like => like.toString() !== req.user.id);
+      comment.likes = comment.likes.filter(
+        (like) => like.toString() !== req.user.id
+      );
     } else {
       // Like
       comment.likes.push(req.user.id);
@@ -165,12 +175,12 @@ exports.likeComment = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: comment
+      data: comment,
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -185,19 +195,19 @@ exports.reportComment = async (req, res) => {
     if (!comment) {
       return res.status(404).json({
         success: false,
-        message: 'Comment not found'
+        message: "Comment not found",
       });
     }
 
     // Check if user has already reported this comment
     const hasReported = comment.reports.some(
-      report => report.user.toString() === req.user.id
+      (report) => report.user.toString() === req.user.id
     );
 
     if (hasReported) {
       return res.status(400).json({
         success: false,
-        message: 'You have already reported this comment'
+        message: "You have already reported this comment",
       });
     }
 
@@ -205,28 +215,28 @@ exports.reportComment = async (req, res) => {
     comment.reports.push({
       user: req.user.id,
       reason: req.body.reason,
-      description: req.body.description
+      description: req.body.description,
     });
 
     // Update status to reported if it's the first report
     if (comment.reports.length === 1) {
-      comment.status = 'reported';
+      comment.status = "reported";
     }
 
     await comment.save();
 
     // Populate the report data
-    await comment.populate('reports.user', 'name');
+    await comment.populate("reports.user", "name");
 
     res.status(200).json({
       success: true,
-      data: comment
+      data: comment,
     });
   } catch (error) {
-    console.error('Error reporting comment:', error);
+    console.error("Error reporting comment:", error);
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -236,26 +246,26 @@ exports.reportComment = async (req, res) => {
 // @access  Private/Admin
 exports.getReportedComments = async (req, res) => {
   try {
-    if (req.user.role !== 'admin') {
+    if (req.user.role !== "admin") {
       return res.status(401).json({
         success: false,
-        message: 'Not authorized to access reported comments'
+        message: "Not authorized to access reported comments",
       });
     }
 
-    const comments = await Comment.find({ status: 'reported' })
-      .populate('author', 'name avatar')
-      .populate('reports.user', 'name')
-      .sort({ 'reports.createdAt': -1 });
+    const comments = await Comment.find({ status: "reported" })
+      .populate("author", "name avatar")
+      .populate("reports.user", "name")
+      .sort({ "reports.createdAt": -1 });
 
     res.status(200).json({
       success: true,
-      data: comments
+      data: comments,
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -265,10 +275,10 @@ exports.getReportedComments = async (req, res) => {
 // @access  Private/Admin
 exports.handleReportedComment = async (req, res) => {
   try {
-    if (req.user.role !== 'admin') {
+    if (req.user.role !== "admin") {
       return res.status(401).json({
         success: false,
-        message: 'Not authorized to handle reported comments'
+        message: "Not authorized to handle reported comments",
       });
     }
 
@@ -278,30 +288,30 @@ exports.handleReportedComment = async (req, res) => {
     if (!comment) {
       return res.status(404).json({
         success: false,
-        message: 'Comment not found'
+        message: "Comment not found",
       });
     }
 
-    if (action === 'delete') {
+    if (action === "delete") {
       // Remove comment from post's comments array
       await Post.findByIdAndUpdate(comment.post, {
-        $pull: { comments: comment._id }
+        $pull: { comments: comment._id },
       });
       await comment.remove();
-    } else if (action === 'ignore') {
-      comment.status = 'active';
+    } else if (action === "ignore") {
+      comment.status = "active";
       comment.reports = [];
       await comment.save();
     }
 
     res.status(200).json({
       success: true,
-      data: {}
+      data: {},
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
-}; 
+};
