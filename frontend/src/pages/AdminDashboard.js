@@ -78,3 +78,23 @@ import {
   getReportedComments,
   handleReportedComment
 } from '../services/api';
+import { alpha, useTheme } from '@mui/material/styles';
+import { formatDistanceToNow } from 'date-fns';
+
+const drawerWidth = 280;
+
+const AdminDashboard = () => {
+  const [activeTab, setActiveTab] = useState(-1);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [reports, setReports] = useState([]);
+  const [posts, setPosts] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [reportTabValue, setReportTabValue] = useState(0);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [dialogType, setDialogType] = useState('');
+  const [formData, setFormData] = useState({});
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
