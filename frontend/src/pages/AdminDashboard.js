@@ -58,3 +58,23 @@ import {
   PhotoCamera as PhotoCameraIcon
 } from '@mui/icons-material';
 import { useAuth } from '../context/AuthContext';
+import {
+  getReports,
+  getReportsByStatus,
+  updateReport,
+  deleteReport,
+  getPosts,
+  deletePost,
+  getUsers,
+  deleteUser,
+  createCategory,
+  getCategories,
+  updateCategory,
+  deleteCategory,
+  updatePost,
+  createPost,
+  updateUser,
+  createUser,
+  getReportedComments,
+  handleReportedComment
+} from '../services/api';
