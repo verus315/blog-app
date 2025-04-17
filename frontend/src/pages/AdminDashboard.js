@@ -198,3 +198,23 @@ const fetchReportedComments = async () => {
   try {
     const response = await getReportedComments();
     if (response.data.success) {
+      setReportedComments(response.data.data);
+    }
+  } catch (error) {
+    console.error('Error fetching reported comments:', error);
+  }
+};
+
+const handleDeleteComment = async (commentId) => {
+  try {
+    const response = await handleReportedComment(commentId, { action: 'delete' });
+    if (response.data.success) {
+      fetchReportedComments();
+    }
+  } catch (error) {
+    console.error('Error deleting comment:', error);
+  }
+};
+
+const handleIgnoreReport = async (commentId) => {
+  try {
