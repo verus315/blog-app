@@ -318,3 +318,24 @@ const handleDelete = async (type, id) => {
 const handleImageChange = (e) => {
   const file = e.target.files[0];
   if (file) {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreview(reader.result);
+      setFormData({ ...formData, image: file });
+    };
+    reader.readAsDataURL(file);
+  }
+};
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    switch (dialogType) {
+      case 'category':
+        try {
+          const categoryData = {
+            name: formData.name ? formData.name.trim() : '',
+            description: formData.description ? formData.description.trim() : ''
+          };
+          
+          
