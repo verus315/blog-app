@@ -368,3 +368,23 @@ const handleSubmit = async (e) => {
           postData.append('title', formData.title.trim());
           postData.append('content', formData.content.trim());
           postData.append('category', formData.category);
+          postData.append('status', 'published');
+            
+          // Add the current user as the author
+          postData.append('author', user._id);
+          
+          if (formData.image) {
+            postData.append('image', formData.image);
+          }
+
+          // Log the FormData contents for debugging
+          console.log('Submitting post with data:');
+          for (let pair of postData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+          }
+
+          if (formData.id) {
+            await updatePost(formData.id, postData);
+          } else {
+            try {
+              const response = await createPost(postData);
