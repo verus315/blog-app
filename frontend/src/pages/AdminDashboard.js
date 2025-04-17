@@ -98,3 +98,23 @@ const AdminDashboard = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
+  const { user } = useAuth();
+  const [reportedComments, setReportedComments] = useState([]);
+  const theme = useTheme();
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+
+  const tabs = [
+    { label: 'Dashboard', value: -1, icon: <DashboardIcon />, color: 'primary' },
+    { label: 'Reports', value: 0, icon: <ReportIcon />, color: 'warning' },
+    { label: 'Posts', value: 1, icon: <ArticleIcon />, color: 'info' },
+    { label: 'Categories', value: 2, icon: <CategoryIcon />, color: 'success' },
+    { label: 'Users', value: 3, icon: <PeopleIcon />, color: 'primary' }
+  ];
+
+  const fetchTabData = async () => {
+    try {
+      setLoading(true);
+      switch (activeTab) {
+        case 0: // Reports
+          const reportsResponse = reportTabValue === 0
