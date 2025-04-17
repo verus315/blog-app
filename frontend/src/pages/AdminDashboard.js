@@ -458,3 +458,43 @@ const handleUpdateUser = async (id, data) => {
       setSnackbar({
         open: true,
         message: 'User updated successfully',
+        severity: 'success'
+      });
+    } else {
+      setSnackbar({
+        open: true,
+        message: response.data.message || 'Failed to update user',
+        severity: 'error'
+      });
+    }
+  } catch (err) {
+    console.error('Error updating user:', err);
+    setSnackbar({
+      open: true,
+      message: err.response?.data?.message || 'Failed to update user',
+      severity: 'error'
+    });
+  } finally {
+    setLoading(false);
+  }
+};
+
+const handleApproveUser = async (userId) => {
+  try {
+    setLoading(true);
+    const response = await updateUser(userId, { isApproved: true });
+    if (response.data.success) {
+      // Update the users list to reflect the change
+      setUsers(users.map(user => 
+        user.id === userId ? { ...user, isApproved: true } : user
+      ));
+      setSnackbar({
+        open: true,
+        message: 'User approved successfully',
+        severity: 'success'
+      });
+    }
+  } catch (err) {
+    console.error('Error approving user:', err);
+    setSnackbar({
+      open: true,
