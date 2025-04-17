@@ -218,3 +218,43 @@ const handleDeleteComment = async (commentId) => {
 
 const handleIgnoreReport = async (commentId) => {
   try {
+    const response = await handleReportedComment(commentId, { action: 'ignore' });
+    if (response.data.success) {
+      fetchReportedComments();
+    }
+  } catch (error) {
+    console.error('Error ignoring report:', error);
+  }
+};
+
+const handleTabChange = (value) => {
+  setActiveTab(value);
+  setMobileOpen(false); // Close mobile drawer when tab changes
+  
+  // Load categories when switching to posts tab
+  if (value === 1) { // Posts tab
+    const loadCategories = async () => {
+      try {
+        const categoriesResponse = await getCategories();
+        setCategories(categoriesResponse.data.data || []);
+      } catch (err) {
+        console.error('Error loading categories:', err);
+      }
+    };
+    loadCategories();
+  }
+};
+
+const handleReportTabChange = (event, newValue) => {
+  setReportTabValue(newValue);
+};
+
+const handleOpenDialog = (type, item = null) => {
+  setDialogType(type);
+  if (type === 'post') {
+    if (item) {
+      setFormData({
+        id: item.id,
+        title: item.title || '',
+        content: item.content || '',
+        category: item.category?._id || '',
