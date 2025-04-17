@@ -138,3 +138,23 @@ const AdminDashboard = () => {
         break;
     }
   } catch (err) {
+    console.error('Error fetching tab data:', err);
+    setError('Failed to fetch data');
+  } finally {
+    setLoading(false);
+  }
+};
+
+useEffect(() => {
+  if (user?.role !== 'admin') {
+    setError('Access denied. Admin privileges required.');
+    setLoading(false);
+    return;
+  }
+  
+  const fetchAllData = async () => {
+    try {
+      setLoading(true);
+      // Fetch all necessary data for the dashboard
+      const [reportsRes, postsRes, categoriesRes, usersRes] = await Promise.all([
+        getReports(),
