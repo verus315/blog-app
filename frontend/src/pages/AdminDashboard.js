@@ -158,3 +158,43 @@ useEffect(() => {
       // Fetch all necessary data for the dashboard
       const [reportsRes, postsRes, categoriesRes, usersRes] = await Promise.all([
         getReports(),
+        getPosts(),
+        getCategories(),
+        getUsers()
+      ]);
+
+      if (reportsRes.data.success) {
+        setReports(reportsRes.data.data || []);
+      }
+      if (postsRes.data.success) {
+        setPosts(postsRes.data.data || []);
+      }
+      if (categoriesRes.data.success) {
+        setCategories(categoriesRes.data.data || []);
+      }
+      if (usersRes.data.success) {
+        setUsers(usersRes.data.data || []);
+      }
+    } catch (err) {
+      console.error('Error fetching dashboard data:', err);
+      setError('Failed to fetch dashboard data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchAllData();
+  fetchReportedComments();
+}, []); // Only run on mount
+
+// Separate useEffect for tab-specific data
+useEffect(() => {
+  if (activeTab >= 0) {
+    fetchTabData();
+  }
+}, [activeTab, reportTabValue]);
+
+const fetchReportedComments = async () => {
+  try {
+    const response = await getReportedComments();
+    if (response.data.success) {
