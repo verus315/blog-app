@@ -258,3 +258,43 @@ const handleOpenDialog = (type, item = null) => {
         title: item.title || '',
         content: item.content || '',
         category: item.category?._id || '',
+        image: null
+      });
+    } else {
+      setFormData({
+        title: '',
+        content: '',
+        category: '',
+        image: null
+      });
+    }
+    setImagePreview(null);
+  } else {
+    setFormData(item || {});
+  }
+  setOpenDialog(true);
+};
+
+const handleCloseDialog = () => {
+  setOpenDialog(false);
+  setFormData({});
+};
+
+const handleMenuClick = (event, item) => {
+  setAnchorEl(event.currentTarget);
+  setSelectedItem(item);
+};
+
+const handleMenuClose = () => {
+  setAnchorEl(null);
+  setSelectedItem(null);
+};
+
+const handleDelete = async (type, id) => {
+  if (window.confirm(`Are you sure you want to delete this ${type}?`)) {
+    try {
+      switch (type) {
+        case 'report':
+          await deleteReport(id);
+          break;
+        case 'post':
