@@ -118,3 +118,23 @@ const AdminDashboard = () => {
       switch (activeTab) {
         case 0: // Reports
           const reportsResponse = reportTabValue === 0
+          ? await getReports()
+          : await getReportsByStatus(reportTabValue === 1 ? 'pending' : 'resolved');
+        setReports(reportsResponse.data.data || []);
+        break;
+      case 1: // Posts
+        const postsResponse = await getPosts();
+        if (postsResponse.data.success) {
+          setPosts(postsResponse.data.data || []);
+        }
+        break;
+      case 2: // Categories
+        const categoriesResponse = await getCategories();
+        setCategories(categoriesResponse.data.data || []);
+        break;
+      case 3: // Users
+        const usersResponse = await getUsers();
+        setUsers(usersResponse.data.data || []);
+        break;
+    }
+  } catch (err) {
