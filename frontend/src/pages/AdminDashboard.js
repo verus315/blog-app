@@ -388,3 +388,23 @@ const handleSubmit = async (e) => {
           } else {
             try {
               const response = await createPost(postData);
+              console.log('Post creation response:', response);
+              if (response.data.success) {
+                handleCloseDialog();
+                // Refresh the posts list
+                const postsResponse = await getPosts();
+                console.log('Posts after refresh:', postsResponse.data);
+                if (postsResponse.data.success) {
+                  setPosts(postsResponse.data.data || []);
+                }
+              } else {
+                setError(response.data.message || 'Failed to create post');
+              }
+            } catch (err) {
+              console.error('Post creation error details:', {
+                message: err.message,
+                response: err.response?.data,
+                status: err.response?.status
+              });
+              setError(err.response?.data?.message || 'Failed to create post');
+              return;
