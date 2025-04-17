@@ -338,4 +338,33 @@ const handleSubmit = async (e) => {
             description: formData.description ? formData.description.trim() : ''
           };
           
+          if (!categoryData.name || !categoryData.description) {
+            setError('Name and description are required');
+            return;
+          }
           
+          if (formData.id) {
+            console.log('Updating category:', categoryData);
+            await updateCategory(formData.id, categoryData);
+          } else {
+            console.log('Creating category:', categoryData);
+            await createCategory(categoryData);
+          }
+          console.log('Category operation successful');
+        } catch (err) {
+          console.error('Category operation failed:', err);
+          setError(err.response?.data?.message || 'Failed to save category');
+          return;
+        }
+        break;
+      case 'post':
+        try {
+          if (!formData.title?.trim() || !formData.content?.trim() || !formData.category) {
+            setError('Title, content, and category are required');
+            return;
+          }
+
+          const postData = new FormData();
+          postData.append('title', formData.title.trim());
+          postData.append('content', formData.content.trim());
+          postData.append('category', formData.category);
