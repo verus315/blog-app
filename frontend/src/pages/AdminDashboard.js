@@ -408,3 +408,53 @@ const handleSubmit = async (e) => {
               });
               setError(err.response?.data?.message || 'Failed to create post');
               return;
+            }
+          }
+        } catch (err) {
+          console.error('Post operation failed:', err);
+          setError(err.response?.data?.message || 'Failed to save post');
+          return;
+        }
+        break;
+      case 'user':
+        try {
+          const userData = {
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            password: formData.password,
+            role: formData.role,
+            isApproved: formData.isApproved
+          };
+
+          if (formData.id) {
+            await updateUser(formData.id, userData);
+          } else {
+            await createUser(userData);
+          }
+        } catch (err) {
+          console.error('User operation failed:', err);
+          setError(err.response?.data?.message || 'Failed to save user');
+          return;
+        }
+        break;
+    }
+  } catch (err) {
+    console.error('Error submitting form:', err);
+    setError(err.response?.data?.message || 'An error occurred');
+  }
+};
+
+const handleUpdateUser = async (id, data) => {
+  try {
+    setLoading(true);
+    const response = await updateUser(id, data);
+    if (response.data.success) {
+      // Refresh the users list
+      const usersResponse = await getUsers();
+      if (usersResponse.data.success) {
+        setUsers(usersResponse.data.data || []);
+      }
+      // Show success message
+      setSnackbar({
+        open: true,
+        message: 'User updated successfully',
