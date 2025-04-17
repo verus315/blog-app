@@ -298,3 +298,23 @@ const handleDelete = async (type, id) => {
           await deleteReport(id);
           break;
         case 'post':
+          await deletePost(id);
+          break;
+        case 'category':
+          await deleteCategory(id);
+          break;
+        case 'user':
+          await deleteUser(id);
+          break;
+      }
+      fetchTabData();
+    } catch (err) {
+      console.error(`Error deleting ${type}:`, err);
+    }
+  }
+  handleMenuClose();
+};
+
+const handleImageChange = (e) => {
+  const file = e.target.files[0];
+  if (file) {
