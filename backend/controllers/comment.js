@@ -44,30 +44,30 @@ exports.createComment = async (req, res) => {
     if (!post) {
       return res.status(404).json({
         success: false,
-        message: 'Post not found'
+        message: "Post not found",
       });
     }
 
     const comment = await Comment.create({
       ...req.body,
       postId: req.params.postId,
-      authorId: req.user.id
+      authorId: req.user.id,
     });
-    
+
     // Get author information
     const author = await User.findByPk(req.user.id, {
-      attributes: ['id', 'name', 'avatar']
+      attributes: ["id", "name", "avatar"],
     });
 
     res.status(201).json({
       success: true,
-      data: { ...comment.toJSON(), author }
+      data: { ...comment.toJSON(), author },
     });
   } catch (error) {
-    console.error('Error creating comment:', error);
+    console.error("Error creating comment:", error);
     res.status(500).json({
       success: false,
-      message: 'Error creating comment'
+      message: "Error creating comment",
     });
   }
 };
@@ -78,3 +78,43 @@ exports.createComment = async (req, res) => {
 exports.updateComment = async (req, res) => {
   try {
     const comment = await Comment.findByPk(req.params.id);
+
+    if (!comment) {
+      return res.status(404).json({
+        success: false,
+        message: "Comment not found",
+      });
+    }
+
+    // Make sure user is comment owner or admin
+    if (comment.authorId !== req.user.id && req.user.role !== "admin") {
+      return res.status(401).json({
+        success: false,
+        message: "Not authorized to update this comment",
+      });
+    }
+
+    await comment.update(req.body);
+
+    // Get updated comment with author info
+    const updatedComment = await Comment.findByPk(comment.id, {
+      include: [
+        {
+          model: User,
+          as: "author",
+          attributes: ["id", "name", "avatar"],
+        },
+      ],
+    });
+
+    res.status(200).json({
+      success: true,
+      data: updatedComment,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
