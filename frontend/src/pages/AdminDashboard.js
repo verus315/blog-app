@@ -714,3 +714,22 @@ const drawer = (
                       onClick={() => handleDeleteComment(comment.id)}
                       sx={{ mr: 1 }}
                     >
+                                       Delete
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      onClick={() => handleIgnoreReport(comment.id)}
+                    >
+                      Ignore
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+    </>
+  );
