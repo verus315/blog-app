@@ -166,7 +166,7 @@ exports.likeComment = async (req, res) => {
     if (!comment) {
       return res.status(404).json({
         success: false,
-        message: 'Comment not found'
+        message: "Comment not found",
       });
     }
 
@@ -176,19 +176,19 @@ exports.likeComment = async (req, res) => {
 
     // Update likes array
     const updatedLikes = isLiked
-      ? likes.filter(id => id !== req.user.id)
+      ? likes.filter((id) => id !== req.user.id)
       : [...likes, req.user.id];
 
- await comment.update({ likes: updatedLikes });
+    await comment.update({ likes: updatedLikes });
 
     res.status(200).json({
       success: true,
-      data: comment
+      data: comment,
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -203,18 +203,18 @@ exports.reportComment = async (req, res) => {
     if (!comment) {
       return res.status(404).json({
         success: false,
-        message: 'Comment not found'
+        message: "Comment not found",
       });
     }
 
     // Get current reports array
     const reports = comment.reports || [];
-    const hasReported = reports.some(report => report.userId === req.user.id);
+    const hasReported = reports.some((report) => report.userId === req.user.id);
 
     if (hasReported) {
       return res.status(400).json({
         success: false,
-        message: 'You have already reported this comment'
+        message: "You have already reported this comment",
       });
     }
 
@@ -222,22 +222,22 @@ exports.reportComment = async (req, res) => {
     const newReport = {
       userId: req.user.id,
       reason: req.body.reason,
-      createdAt: new Date()
+      createdAt: new Date(),
     };
 
     await comment.update({
       reports: [...reports, newReport],
-      status: reports.length + 1 >= 3 ? 'reported' : comment.status
+      status: reports.length + 1 >= 3 ? "reported" : comment.status,
     });
 
     res.status(200).json({
       success: true,
-      message: 'Comment reported successfully'
+      message: "Comment reported successfully",
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -247,4 +247,68 @@ exports.reportComment = async (req, res) => {
 // @access  Private/Admin
 exports.getReportedComments = async (req, res) => {
   try {
-    const comments = await Comment.findAll({  
+    const comments = await Comment.findAll({
+      where: {
+        status: "reported",
+      },
+      include: [
+        {
+          model: User,
+          as: "author",
+          attributes: ["id", "name", "avatar"],
+        },
+        {
+          model: Post,
+          as: "post",
+          attributes: ["id", "title"],
+        },
+      ],
+      order: [["createdAt", "DESC"]],
+    });
+
+    res.status(200).json({
+      success: true,
+      count: comments.length,
+      data: comments,
+    });
+  } catch (error) {
+    console.error("Error fetching reported comments:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching reported comments",
+    });
+  }
+};
+
+// @desc    Handle reported comment (admin only)
+// @route   PUT /api/v1/comments/:id/handle-report
+// @access  Private/Admin
+exports.handleReportedComment = async (req, res) => {
+  try {
+    const comment = await Comment.findByPk(req.params.id);
+
+    if (!comment) {
+      return res.status(404).json({
+        success: false,
+        message: "Comment not found",
+      });
+    }
+
+    // Update comment status based on action
+    await comment.update({
+      status: req.body.action === "approve" ? "active" : "removed",
+      reports: [], // Clear reports after handling
+    });
+
+    res.status(200).json({
+      success: true,
+      data: comment,
+    });
+  } catch (error) {
+    console.error("Error handling reported comment:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error handling reported comment",
+    });
+  }
+};
