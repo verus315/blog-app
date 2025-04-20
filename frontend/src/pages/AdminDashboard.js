@@ -548,4 +548,33 @@ const drawer = (
               onClick={() => handleTabChange(tab.value)}
               sx={{
                 borderRadius: 2,
-                
+                mb: 1,
+                '&.Mui-selected': {
+                  bgcolor: alpha(theme.palette[tab.color || 'primary'].main, 0.1),
+                  color: theme.palette[tab.color || 'primary'].main,
+                  '&:hover': {
+                    bgcolor: alpha(theme.palette[tab.color || 'primary'].main, 0.15),
+                  }
+                }
+              }}
+            >
+                     <ListItemIcon sx={{ 
+                color: activeTab === tab.value ? theme.palette[tab.color || 'primary'].main : 'text.secondary',
+                minWidth: 40
+              }}>
+                {tab.icon}
+              </ListItemIcon>
+              <ListItemText 
+                primary={tab.label}
+                primaryTypographyProps={{ 
+                  fontWeight: activeTab === tab.value ? 600 : 400
+                }}
+              />
+              {tab.label === 'Reports' && reports.filter(r => r.status === 'pending').length > 0 && (
+                <Chip
+                  size="small"
+                  label={reports.filter(r => r.status === 'pending').length}
+                  color="warning"
+                  sx={{ ml: 1 }}
+                />
+              )}
