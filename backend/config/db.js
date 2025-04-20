@@ -30,7 +30,7 @@ const connectDB = async () => {
     // Sync all models with database
     // Note: In production, you might want to use migrations instead
     if (process.env.NODE_ENV === 'development') {
-      await sequelize.sync({ alter: true });
+      await sequelize.sync();
       console.log('All models were synchronized successfully.');
     }
   } catch (err) {
