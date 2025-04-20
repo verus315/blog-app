@@ -600,3 +600,18 @@ const drawer = (
             }
           }}
         >
+                    Visit Website
+        </Button>
+      </Box>
+    </Box>
+  );
+
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  
