@@ -538,3 +538,14 @@ const drawer = (
     }}>
       <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 700 }}>
         Admin Panel
+        </Typography>
+      </Toolbar>
+      <List sx={{ px: 2, py: 2, flex: 1 }}>
+        {tabs.map((tab) => (
+          <ListItem key={tab.value} disablePadding>
+            <ListItemButton
+              selected={activeTab === tab.value}
+              onClick={() => handleTabChange(tab.value)}
+              sx={{
+                borderRadius: 2,
+                
