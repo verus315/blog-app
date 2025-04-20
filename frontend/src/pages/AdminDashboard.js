@@ -733,3 +733,91 @@ const drawer = (
       </Box>
     </>
   );
+
+  const renderPostsTab = () => (
+    <>
+      <Box sx={{ mb: 3 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleOpenDialog('post')}
+        >
+          Add Post
+        </Button>
+      </Box>
+
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Title</TableCell>
+              <TableCell>Author</TableCell>
+              <TableCell>Category</TableCell>
+              <TableCell>Date</TableCell>
+              <TableCell>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {posts.map((post) => (
+              <TableRow key={post.id}>
+                <TableCell>{post.title}</TableCell>
+                <TableCell>{post.author?.name}</TableCell>
+                <TableCell>{post.category?.name}</TableCell>
+                <TableCell>{new Date(post.createdAt).toLocaleDateString()}</TableCell>
+                <TableCell>
+                  <IconButton onClick={() => handleOpenDialog('post', post)}>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton onClick={(e) => handleMenuClick(e, { type: 'post', id: post.id })}>
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
+  );
+
+  const renderCategoriesTab = () => (
+    <>
+      <Box sx={{ mb: 3 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleOpenDialog('category')}
+        >
+          Add Category
+        </Button>
+      </Box>
+
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Description</TableCell>
+              <TableCell>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {categories.map((category) => (
+              <TableRow key={category.id}>
+                <TableCell>{category.name}</TableCell>
+                <TableCell>{category.description}</TableCell>
+                <TableCell>
+                  <IconButton onClick={() => handleOpenDialog('category', category)}>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton onClick={(e) => handleMenuClick(e, { type: 'category', id: category.id })}>
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
+  );
