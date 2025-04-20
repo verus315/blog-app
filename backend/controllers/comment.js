@@ -158,3 +158,43 @@ exports.deleteComment = async (req, res) => {
 
 // @desc    Like/Unlike a comment
 // @route   PUT /api/v1/comments/:id/like
+// @access  Private
+exports.likeComment = async (req, res) => {
+  try {
+    const comment = await Comment.findByPk(req.params.id);
+
+    if (!comment) {
+      return res.status(404).json({
+        success: false,
+        message: 'Comment not found'
+      });
+    }
+
+    // Get current likes array
+    const likes = comment.likes || [];
+    const isLiked = likes.includes(req.user.id);
+
+    // Update likes array
+    const updatedLikes = isLiked
+      ? likes.filter(id => id !== req.user.id)
+      : [...likes, req.user.id];
+
+ await comment.update({ likes: updatedLikes });
+
+    res.status(200).json({
+      success: true,
+      data: comment
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+// @desc    Report a comment
+// @route   POST /api/v1/comments/:id/report
+// @access  Private
+exports.reportComment = async (req, res) => {
+  try {
