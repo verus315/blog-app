@@ -821,3 +821,15 @@ const drawer = (
       </TableContainer>
     </>
   );
+
+  const renderUsersTab = () => (
+    <>
+      <Box sx={{ mb: 3 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleOpenDialog('user')}
+        >
+          Add User
+        </Button>
+      </Box>
