@@ -198,3 +198,53 @@ exports.likeComment = async (req, res) => {
 // @access  Private
 exports.reportComment = async (req, res) => {
   try {
+    const comment = await Comment.findByPk(req.params.id);
+
+    if (!comment) {
+      return res.status(404).json({
+        success: false,
+        message: 'Comment not found'
+      });
+    }
+
+    // Get current reports array
+    const reports = comment.reports || [];
+    const hasReported = reports.some(report => report.userId === req.user.id);
+
+    if (hasReported) {
+      return res.status(400).json({
+        success: false,
+        message: 'You have already reported this comment'
+      });
+    }
+
+    // Add new report
+    const newReport = {
+      userId: req.user.id,
+      reason: req.body.reason,
+      createdAt: new Date()
+    };
+
+    await comment.update({
+      reports: [...reports, newReport],
+      status: reports.length + 1 >= 3 ? 'reported' : comment.status
+    });
+
+    res.status(200).json({
+      success: true,
+      message: 'Comment reported successfully'
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+// @desc    Get reported comments (admin only)
+// @route   GET /api/v1/comments/reported
+// @access  Private/Admin
+exports.getReportedComments = async (req, res) => {
+  try {
+    const comments = await Comment.findAll({  
