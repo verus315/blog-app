@@ -498,3 +498,43 @@ const handleApproveUser = async (userId) => {
     console.error('Error approving user:', err);
     setSnackbar({
       open: true,
+      message: err.response?.data?.message || 'Failed to approve user',
+      severity: 'error'
+    });
+  } finally {
+    setLoading(false);
+  }
+};
+
+const handleBlockUser = async (userId) => {
+  await handleUpdateUser(userId, { status: 'blocked' });
+};
+
+const handleResolveReport = async (reportId) => {
+  try {
+    const response = await updateReport(reportId, { status: 'resolved' });
+    if (response.data.success) {
+      // Update the reports state immediately
+      setReports(reports.map(report => 
+        report.id === reportId 
+          ? { ...report, status: 'resolved' }
+          : report
+      ));
+    } else {
+      setError('Failed to resolve report');
+    }
+  } catch (err) {
+    setError(err.response?.data?.message || 'Failed to resolve report');
+  }
+};
+
+const drawer = (
+  <Box sx={{ height: '100%', bgcolor: 'background.paper', display: 'flex', flexDirection: 'column' }}>
+    <Toolbar sx={{ 
+      px: 2,
+      py: 2,
+      background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+      color: 'white'
+    }}>
+      <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 700 }}>
+        Admin Panel
