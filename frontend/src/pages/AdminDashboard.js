@@ -833,3 +833,32 @@ const drawer = (
           Add User
         </Button>
       </Box>
+      
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>Role</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Joined</TableCell>
+              <TableCell>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {users.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell>{user.name}</TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>
+                  <Chip
+                    label={user.role}
+                    color={user.role === 'admin' ? 'primary' : 'default'}
+                  />
+                </TableCell>
+                <TableCell>
+                  <Chip
+                    label={user.isApproved ? 'Approved' : 'Pending'}
+                    color={user.isApproved ? 'success' : 'warning'}
+                  />
