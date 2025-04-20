@@ -588,3 +588,15 @@ const drawer = (
           variant="contained"
           startIcon={<PublicIcon />}
           href="/"
+          sx={{
+            borderRadius: 2,
+            py: 1,
+            textTransform: 'none',
+            fontSize: '1rem',
+            fontWeight: 500,
+            background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+            '&:hover': {
+              background: `linear-gradient(45deg, ${theme.palette.primary.dark}, ${theme.palette.secondary.dark})`,
+            }
+          }}
+        >
