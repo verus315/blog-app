@@ -614,4 +614,103 @@ const drawer = (
     );
   }
 
-  
+  if (error) {
+    return (
+      <Container>
+        <Alert severity="error">{error}</Alert>
+      </Container>
+    );
+  }
+
+  const renderReportsTab = () => (
+    <>
+      <Paper sx={{ mb: 4 }}>
+        <Tabs
+          value={reportTabValue}
+          onChange={handleReportTabChange}
+          indicatorColor="primary"
+          textColor="primary"
+        >
+          <Tab label="All Reports" />
+          <Tab label="Pending Reports" />
+          <Tab label="Resolved Reports" />
+        </Tabs>
+      </Paper>
+
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Report ID</TableCell>
+              <TableCell>Type</TableCell>
+              <TableCell>Reason</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Date</TableCell>
+              <TableCell>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {reports.map((report) => (
+              <TableRow key={report.id}>
+                <TableCell>{report.id}</TableCell>
+                <TableCell>{report.reportedItemType}</TableCell>
+                <TableCell>{report.reason}</TableCell>
+                <TableCell>
+                  <Chip
+                    label={report.status}
+                    color={report.status === 'pending' ? 'warning' : 'success'}
+                  />
+                </TableCell>
+                <TableCell>
+                  {new Date(report.createdAt).toLocaleDateString()}
+                </TableCell>
+                <TableCell>
+                  {report.status === 'pending' && (
+                    <Button
+                      variant="contained"
+                      color="success"
+                      size="small"
+                      onClick={() => handleResolveReport(report.id)}
+                      sx={{ mr: 1 }}
+                    >
+                      Resolve
+                    </Button>
+                  )}
+                  <IconButton onClick={(e) => handleMenuClick(e, { type: 'report', id: report.id })}>
+                    <MoreVertIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <Box sx={{ mt: 4 }}>
+        <Typography variant="h5" gutterBottom>
+          Reported Comments
+        </Typography>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Content</TableCell>
+                <TableCell>Author</TableCell>
+                <TableCell>Reports</TableCell>
+                <TableCell>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {reportedComments.map((comment) => (
+                <TableRow key={comment.id}>
+                  <TableCell>{comment.content}</TableCell>
+                  <TableCell>{comment.author.name}</TableCell>
+                  <TableCell>{comment.reports.length}</TableCell>
+                  <TableCell>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      size="small"
+                      onClick={() => handleDeleteComment(comment.id)}
+                      sx={{ mr: 1 }}
+                    >
