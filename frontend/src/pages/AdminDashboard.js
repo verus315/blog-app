@@ -578,3 +578,13 @@ const drawer = (
                   sx={{ ml: 1 }}
                 />
               )}
+                        </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <Box sx={{ p: 2, borderTop: 1, borderColor: 'divider' }}>
+        <Button
+          fullWidth
+          variant="contained"
+          startIcon={<PublicIcon />}
+          href="/"
