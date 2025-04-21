@@ -498,3 +498,463 @@ const handleApproveUser = async (userId) => {
     console.error('Error approving user:', err);
     setSnackbar({
       open: true,
+      message: err.response?.data?.message || 'Failed to approve user',
+      severity: 'error'
+    });
+  } finally {
+    setLoading(false);
+  }
+};
+
+const handleBlockUser = async (userId) => {
+  await handleUpdateUser(userId, { status: 'blocked' });
+};
+
+const handleResolveReport = async (reportId) => {
+  try {
+    const response = await updateReport(reportId, { status: 'resolved' });
+    if (response.data.success) {
+      // Update the reports state immediately
+      setReports(reports.map(report => 
+        report.id === reportId 
+          ? { ...report, status: 'resolved' }
+          : report
+      ));
+    } else {
+      setError('Failed to resolve report');
+    }
+  } catch (err) {
+    setError(err.response?.data?.message || 'Failed to resolve report');
+  }
+};
+
+const drawer = (
+  <Box sx={{ height: '100%', bgcolor: 'background.paper', display: 'flex', flexDirection: 'column' }}>
+    <Toolbar sx={{ 
+      px: 2,
+      py: 2,
+      background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+      color: 'white'
+    }}>
+      <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 700 }}>
+        Admin Panel
+        </Typography>
+      </Toolbar>
+      <List sx={{ px: 2, py: 2, flex: 1 }}>
+        {tabs.map((tab) => (
+          <ListItem key={tab.value} disablePadding>
+            <ListItemButton
+              selected={activeTab === tab.value}
+              onClick={() => handleTabChange(tab.value)}
+              sx={{
+                borderRadius: 2,
+                mb: 1,
+                '&.Mui-selected': {
+                  bgcolor: alpha(theme.palette[tab.color || 'primary'].main, 0.1),
+                  color: theme.palette[tab.color || 'primary'].main,
+                  '&:hover': {
+                    bgcolor: alpha(theme.palette[tab.color || 'primary'].main, 0.15),
+                  }
+                }
+              }}
+            >
+                     <ListItemIcon sx={{ 
+                color: activeTab === tab.value ? theme.palette[tab.color || 'primary'].main : 'text.secondary',
+                minWidth: 40
+              }}>
+                {tab.icon}
+              </ListItemIcon>
+              <ListItemText 
+                primary={tab.label}
+                primaryTypographyProps={{ 
+                  fontWeight: activeTab === tab.value ? 600 : 400
+                }}
+              />
+              {tab.label === 'Reports' && reports.filter(r => r.status === 'pending').length > 0 && (
+                <Chip
+                  size="small"
+                  label={reports.filter(r => r.status === 'pending').length}
+                  color="warning"
+                  sx={{ ml: 1 }}
+                />
+              )}
+                        </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <Box sx={{ p: 2, borderTop: 1, borderColor: 'divider' }}>
+        <Button
+          fullWidth
+          variant="contained"
+          startIcon={<PublicIcon />}
+          href="/"
+          sx={{
+            borderRadius: 2,
+            py: 1,
+            textTransform: 'none',
+            fontSize: '1rem',
+            fontWeight: 500,
+            background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+            '&:hover': {
+              background: `linear-gradient(45deg, ${theme.palette.primary.dark}, ${theme.palette.secondary.dark})`,
+            }
+          }}
+        >
+                    Visit Website
+        </Button>
+      </Box>
+    </Box>
+  );
+
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container>
+        <Alert severity="error">{error}</Alert>
+      </Container>
+    );
+  }
+
+  const renderReportsTab = () => (
+    <>
+      <Paper sx={{ mb: 4 }}>
+        <Tabs
+          value={reportTabValue}
+          onChange={handleReportTabChange}
+          indicatorColor="primary"
+          textColor="primary"
+        >
+          <Tab label="All Reports" />
+          <Tab label="Pending Reports" />
+          <Tab label="Resolved Reports" />
+        </Tabs>
+      </Paper>
+
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Report ID</TableCell>
+              <TableCell>Type</TableCell>
+              <TableCell>Reason</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Date</TableCell>
+              <TableCell>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {reports.map((report) => (
+              <TableRow key={report.id}>
+                <TableCell>{report.id}</TableCell>
+                <TableCell>{report.reportedItemType}</TableCell>
+                <TableCell>{report.reason}</TableCell>
+                <TableCell>
+                  <Chip
+                    label={report.status}
+                    color={report.status === 'pending' ? 'warning' : 'success'}
+                  />
+                </TableCell>
+                <TableCell>
+                  {new Date(report.createdAt).toLocaleDateString()}
+                </TableCell>
+                <TableCell>
+                  {report.status === 'pending' && (
+                    <Button
+                      variant="contained"
+                      color="success"
+                      size="small"
+                      onClick={() => handleResolveReport(report.id)}
+                      sx={{ mr: 1 }}
+                    >
+                      Resolve
+                    </Button>
+                  )}
+                  <IconButton onClick={(e) => handleMenuClick(e, { type: 'report', id: report.id })}>
+                    <MoreVertIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <Box sx={{ mt: 4 }}>
+        <Typography variant="h5" gutterBottom>
+          Reported Comments
+        </Typography>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Content</TableCell>
+                <TableCell>Author</TableCell>
+                <TableCell>Reports</TableCell>
+                <TableCell>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {reportedComments.map((comment) => (
+                <TableRow key={comment.id}>
+                  <TableCell>{comment.content}</TableCell>
+                  <TableCell>{comment.author.name}</TableCell>
+                  <TableCell>{comment.reports.length}</TableCell>
+                  <TableCell>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      size="small"
+                      onClick={() => handleDeleteComment(comment.id)}
+                      sx={{ mr: 1 }}
+                    >
+                                       Delete
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      onClick={() => handleIgnoreReport(comment.id)}
+                    >
+                      Ignore
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+    </>
+  );
+
+  const renderPostsTab = () => (
+    <>
+      <Box sx={{ mb: 3 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleOpenDialog('post')}
+        >
+          Add Post
+        </Button>
+      </Box>
+
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Title</TableCell>
+              <TableCell>Author</TableCell>
+              <TableCell>Category</TableCell>
+              <TableCell>Date</TableCell>
+              <TableCell>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {posts.map((post) => (
+              <TableRow key={post.id}>
+                <TableCell>{post.title}</TableCell>
+                <TableCell>{post.author?.name}</TableCell>
+                <TableCell>{post.category?.name}</TableCell>
+                <TableCell>{new Date(post.createdAt).toLocaleDateString()}</TableCell>
+                <TableCell>
+                  <IconButton onClick={() => handleOpenDialog('post', post)}>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton onClick={(e) => handleMenuClick(e, { type: 'post', id: post.id })}>
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
+  );
+
+  const renderCategoriesTab = () => (
+    <>
+      <Box sx={{ mb: 3 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleOpenDialog('category')}
+        >
+          Add Category
+        </Button>
+      </Box>
+
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Description</TableCell>
+              <TableCell>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {categories.map((category) => (
+              <TableRow key={category.id}>
+                <TableCell>{category.name}</TableCell>
+                <TableCell>{category.description}</TableCell>
+                <TableCell>
+                  <IconButton onClick={() => handleOpenDialog('category', category)}>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton onClick={(e) => handleMenuClick(e, { type: 'category', id: category.id })}>
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
+  );
+
+  const renderUsersTab = () => (
+    <>
+      <Box sx={{ mb: 3 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleOpenDialog('user')}
+        >
+          Add User
+        </Button>
+      </Box>
+
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>Role</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Joined</TableCell>
+              <TableCell>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {users.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell>{user.name}</TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>
+                  <Chip
+                    label={user.role}
+                    color={user.role === 'admin' ? 'primary' : 'default'}
+                  />
+                </TableCell>
+                <TableCell>
+                  <Chip
+                    label={user.isApproved ? 'Approved' : 'Pending'}
+                    color={user.isApproved ? 'success' : 'warning'}
+                  />
+          </TableCell>
+                <TableCell>{new Date(user.createdAt).toLocaleDateString()}</TableCell>
+                <TableCell>
+                  {!user.isApproved && (
+                    <Button
+                      variant="contained"
+                      color="success"
+                      size="small"
+                      onClick={() => handleApproveUser(user.id)}
+                      sx={{ mr: 1 }}
+                    >
+                      Approve
+                    </Button>
+                  )}
+                  <IconButton onClick={() => handleOpenDialog('user', user)}>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton onClick={(e) => handleMenuClick(e, { type: 'user', id: user.id })}>
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+                </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
+  );
+
+  const renderDashboard = () => (
+    <Box>
+      <Typography variant="h5" sx={{ mb: 4, fontWeight: 600 }}>
+        Dashboard Overview
+      </Typography>
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={6} md={3}>
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              borderRadius: 4,
+              bgcolor: alpha(theme.palette.warning.main, 0.1),
+              border: 1,
+              borderColor: 'warning.main'
+            }}
+          >
+            <Stack spacing={1}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <WarningIcon color="warning" />
+                <Typography variant="h6" color="warning.main">
+                  Pending Reports
+                </Typography>
+              </Box>
+              <Typography variant="h3" sx={{ fontWeight: 700 }}>
+                {reports.filter(r => r.status === 'pending').length}
+              </Typography>
+            </Stack>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+        <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              borderRadius: 4,
+              bgcolor: alpha(theme.palette.info.main, 0.1),
+              border: 1,
+              borderColor: 'info.main'
+            }}
+          >
+            <Stack spacing={1}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <ArticleIcon color="info" />
+                <Typography variant="h6" color="info.main">
+                  Total Posts
+                </Typography>
+                </Box>
+              <Typography variant="h3" sx={{ fontWeight: 700 }}>
+                {posts.length}
+              </Typography>
+            </Stack>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              borderRadius: 4,
+              bgcolor: alpha(theme.palette.success.main, 0.1),
+              border: 1,
+              borderColor: 'success.main'
+            }}
+          >
+            <Stack spacing={1}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
