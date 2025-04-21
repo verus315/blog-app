@@ -160,7 +160,7 @@ const Navbar = () => {
               textFillColor: 'transparent'
             }}
           >
-            Blog
+            Threadly
           </Typography>
 
           <Box sx={{ flexGrow: 1, maxWidth: 600, mx: { xs: 1, sm: 4 } }}>
