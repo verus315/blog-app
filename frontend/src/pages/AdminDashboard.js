@@ -958,3 +958,34 @@ const drawer = (
           >
             <Stack spacing={1}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <CategoryIcon color="success" />
+                <Typography variant="h6" color="success.main">
+                  Categories
+                </Typography>
+              </Box>
+              <Typography variant="h3" sx={{ fontWeight: 700 }}>
+                {categories.length}
+              </Typography>
+            </Stack>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              borderRadius: 4,
+              bgcolor: alpha(theme.palette.primary.main, 0.1),
+              border: 1,
+              borderColor: 'primary.main'
+            }}
+          >
+            <Stack spacing={1}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <PeopleIcon color="primary" />
+                <Typography variant="h6" color="primary.main">
+                  Total Users
+                </Typography>
+              </Box>
+              <Typography variant="h3" sx={{ fontWeight: 700 }}>
+                {users.length}
