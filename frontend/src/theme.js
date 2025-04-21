@@ -15,7 +15,7 @@ const theme = createTheme({
       contrastText: '#ffffff',
     },
     background: {
-      default: '#f8fafc',
+      default: '#f5fffa', // Mint cream
       paper: '#ffffff',
     },
     text: {
