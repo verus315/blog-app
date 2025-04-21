@@ -833,7 +833,7 @@ const drawer = (
           Add User
         </Button>
       </Box>
-      
+
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -862,3 +862,99 @@ const drawer = (
                     label={user.isApproved ? 'Approved' : 'Pending'}
                     color={user.isApproved ? 'success' : 'warning'}
                   />
+          </TableCell>
+                <TableCell>{new Date(user.createdAt).toLocaleDateString()}</TableCell>
+                <TableCell>
+                  {!user.isApproved && (
+                    <Button
+                      variant="contained"
+                      color="success"
+                      size="small"
+                      onClick={() => handleApproveUser(user.id)}
+                      sx={{ mr: 1 }}
+                    >
+                      Approve
+                    </Button>
+                  )}
+                  <IconButton onClick={() => handleOpenDialog('user', user)}>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton onClick={(e) => handleMenuClick(e, { type: 'user', id: user.id })}>
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+                </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
+  );
+
+  const renderDashboard = () => (
+    <Box>
+      <Typography variant="h5" sx={{ mb: 4, fontWeight: 600 }}>
+        Dashboard Overview
+      </Typography>
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={6} md={3}>
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              borderRadius: 4,
+              bgcolor: alpha(theme.palette.warning.main, 0.1),
+              border: 1,
+              borderColor: 'warning.main'
+            }}
+          >
+            <Stack spacing={1}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <WarningIcon color="warning" />
+                <Typography variant="h6" color="warning.main">
+                  Pending Reports
+                </Typography>
+              </Box>
+              <Typography variant="h3" sx={{ fontWeight: 700 }}>
+                {reports.filter(r => r.status === 'pending').length}
+              </Typography>
+            </Stack>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+        <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              borderRadius: 4,
+              bgcolor: alpha(theme.palette.info.main, 0.1),
+              border: 1,
+              borderColor: 'info.main'
+            }}
+          >
+            <Stack spacing={1}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <ArticleIcon color="info" />
+                <Typography variant="h6" color="info.main">
+                  Total Posts
+                </Typography>
+                </Box>
+              <Typography variant="h3" sx={{ fontWeight: 700 }}>
+                {posts.length}
+              </Typography>
+            </Stack>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              borderRadius: 4,
+              bgcolor: alpha(theme.palette.success.main, 0.1),
+              border: 1,
+              borderColor: 'success.main'
+            }}
+          >
+            <Stack spacing={1}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
