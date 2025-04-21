@@ -1466,3 +1466,5 @@ const drawer = (
     </Box>
   );
 };
+
+export default AdminDashboard;
