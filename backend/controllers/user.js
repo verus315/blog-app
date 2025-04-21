@@ -50,3 +50,51 @@ exports.updateUser = async (req, res) => {
         message: 'Not authorized to update this user'
       });
     }
+    
+    // Update fields
+    await user.update({
+      name: req.body.name || user.name,
+      email: req.body.email || user.email,
+      avatar: req.body.avatar || user.avatar
+    });
+
+    res.status(200).json({
+      success: true,
+      data: user
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+// @desc    Get all users (admin only)
+// @route   GET /api/v1/users
+// @access  Private/Admin
+exports.getUsers = async (req, res) => {
+  try {
+    const users = await User.findAll({
+      attributes: { exclude: ['password'] }
+    });
+
+    res.status(200).json({
+      success: true,
+      count: users.length,
+      data: users
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+// @desc    Update user status (admin only)
+// @route   PUT /api/v1/users/:id/status
+// @access  Private/Admin
+exports.updateUserStatus = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.params.id);
