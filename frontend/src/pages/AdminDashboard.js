@@ -1309,3 +1309,160 @@ const drawer = (
                               objectFit: 'cover'
                             }}
                             />
+                                                   <IconButton
+                            onClick={() => {
+                              setFormData({ ...formData, image: null });
+                              setImagePreview(null);
+                            }}
+                            sx={{
+                              position: 'absolute',
+                              top: 8,
+                              right: 8,
+                              bgcolor: 'background.paper',
+                              boxShadow: 1,
+                              '&:hover': { bgcolor: 'background.paper' }
+                            }}
+                          >
+                            <CloseIcon />
+                          </IconButton>
+                        </Box>
+                        <Typography variant="caption" color="text.secondary">
+                          Click the X to remove the image
+                        </Typography>
+                      </Box>
+                    ) : (
+                      <Box>
+                        <input
+                          accept="image/*"
+                          type="file"
+                          hidden
+                          id="admin-image-upload"
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            if (file) {
+                              setFormData({ ...formData, image: file });
+                              setImagePreview(URL.createObjectURL(file));
+                            }
+                          }}
+                        />
+                        <label htmlFor="admin-image-upload">
+                          <Button
+                            component="span"
+                            variant="outlined"
+                            startIcon={<PhotoCameraIcon />}
+                            sx={{ mb: 1 }}
+                          >
+                            Upload Image
+                          </Button>
+                        </label>
+                        <Typography variant="caption" color="text.secondary" display="block">
+                          Recommended size: 1200x600 pixels
+                        </Typography>
+                      </Box>
+                    )}
+                  </Paper>
+                </Box>
+
+                <Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                    <ArticleIcon color="primary" fontSize="small" />
+                    <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                      Content
+                    </Typography>
+                  </Box>
+                  <TextField
+                    fullWidth
+                    multiline
+                    rows={8}
+                    label="Write your post content here..."
+                    value={formData.content || ''}
+                    onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                    required
+                    error={!formData.content?.trim()}
+                    helperText={!formData.content?.trim() ? 'Content is required' : ''}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2
+                      }
+                    }}
+                  />
+                </Box>
+              </Stack>
+            </Box>
+          )}
+          {dialogType === 'user' && (
+            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
+              <TextField
+                fullWidth
+                label="Name"
+                value={formData.name || ''}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                margin="normal"
+                required
+              />
+              <TextField
+                fullWidth
+                label="Email"
+                value={formData.email || ''}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                margin="normal"
+                required
+              />
+              {!formData.id && (
+                <TextField
+                  fullWidth
+                  label="Password"
+                  type="password"
+                  value={formData.password || ''}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  margin="normal"
+                  required={!formData.id}
+                />
+              )}
+              <TextField
+                fullWidth
+                select
+                label="Role"
+                value={formData.role || 'user'}
+                onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                margin="normal"
+                required
+              >
+                <MenuItem value="user">User</MenuItem>
+                <MenuItem value="admin">Admin</MenuItem>
+              </TextField>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={formData.isApproved || false}
+                    onChange={(e) => setFormData({ ...formData, isApproved: e.target.checked })}
+                  />
+                }
+                label="Approved"
+              />
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 3 }}>
+          <Button onClick={handleCloseDialog} variant="outlined" sx={{ borderRadius: 2 }}>
+            Cancel
+          </Button>
+          <Button 
+            onClick={handleSubmit} 
+            variant="contained" 
+            sx={{ 
+              borderRadius: 2,
+              px: 3,
+              background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+              '&:hover': {
+                background: `linear-gradient(45deg, ${theme.palette.primary.dark}, ${theme.palette.secondary.dark})`,
+              }
+            }}
+          >
+            {formData.id ? 'Update' : 'Create'}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
+  );
+};
