@@ -989,3 +989,323 @@ const drawer = (
               </Box>
               <Typography variant="h3" sx={{ fontWeight: 700 }}>
                 {users.length}
+                </Typography>
+            </Stack>
+          </Paper>
+        </Grid>
+
+        {/* Recent Reports */}
+        <Grid item xs={12} md={6}>
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              borderRadius: 4,
+              border: 1,
+              borderColor: 'divider',
+              height: '100%'
+            }}
+          >
+            <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
+              Recent Reports
+            </Typography>
+            <List>
+              {reports.slice(0, 5).map((report) => (
+                <ListItem
+                  key={report.id}
+                  sx={{
+                    borderRadius: 2,
+                    mb: 1,
+                    bgcolor: 'background.default'
+                  }}
+                >
+                  <ListItemIcon>
+                    <Avatar sx={{ bgcolor: 'warning.main' }}>
+                      <ReportIcon />
+                    </Avatar>
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={report.reason}
+                    secondary={formatDistanceToNow(new Date(report.createdAt), { addSuffix: true })}
+                  />
+                  <Chip
+                    label={report.status}
+                    size="small"
+                    color={report.status === 'pending' ? 'warning' : 'success'}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </Paper>
+        </Grid>
+
+        {/* Recent Posts */}
+        <Grid item xs={12} md={6}>
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              borderRadius: 4,
+              border: 1,
+              borderColor: 'divider',
+              height: '100%'
+            }}
+          >
+            <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
+              Recent Posts
+            </Typography>
+            <List>
+              {posts.slice(0, 5).map((post) => (
+                <ListItem
+                  key={post.id}
+                  sx={{
+                    borderRadius: 2,
+                    mb: 1,
+                    bgcolor: 'background.default'
+                  }}
+                >
+                  <ListItemIcon>
+                    <Avatar sx={{ bgcolor: 'info.main' }}>
+                      <ArticleIcon />
+                    </Avatar>
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={post.title}
+                    secondary={formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
+                  />
+                  <Chip
+                    label={post.category?.name}
+                    size="small"
+                    color="info"
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+
+  return (
+    <Box sx={{ display: 'flex' }}>
+      <AppBar
+        position="fixed"
+        sx={{
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          ml: { sm: `${drawerWidth}px` },
+          bgcolor: alpha(theme.palette.background.paper, 0.95),
+          backdropFilter: 'blur(10px)',
+          borderBottom: 1,
+          borderColor: 'divider',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+        }}
+      >
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            sx={{ mr: 2, display: { sm: 'none' }, color: 'text.primary' }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography 
+            variant="h6" 
+            noWrap 
+            component="div"
+            sx={{ 
+              color: 'text.primary',
+              fontWeight: 600
+            }}
+          >
+            {tabs.find(tab => tab.value === activeTab)?.label || 'Admin Dashboard'}
+          </Typography>
+        </Toolbar>
+      </AppBar>
+
+      <Box
+        component="nav"
+        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+      >
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={() => setMobileOpen(false)}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+          sx={{
+            display: { xs: 'block', sm: 'none' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+          }}
+        >
+          {drawer}
+        </Drawer>
+        <Drawer
+          variant="permanent"
+          sx={{
+            display: { xs: 'none', sm: 'block' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+          }}
+          open
+        >
+          {drawer}
+        </Drawer>
+      </Box>
+
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          mt: 8,
+          bgcolor: 'background.default'
+        }}
+      >
+        {activeTab === -1 && renderDashboard()}
+        {activeTab === 0 && renderReportsTab()}
+        {activeTab === 1 && renderPostsTab()}
+        {activeTab === 2 && renderCategoriesTab()}
+        {activeTab === 3 && renderUsersTab()}
+      </Box>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+      >
+        <MenuItem onClick={() => handleDelete(selectedItem?.type, selectedItem?.id)}>
+          Delete
+        </MenuItem>
+      </Menu>
+
+      <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="md" fullWidth>
+        <DialogTitle>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <ArticleIcon color="primary" />
+            <Typography variant="h6" sx={{ fontWeight: 600 }}>
+              {dialogType === 'category' ? (formData.id ? 'Edit Category' : 'Add Category') : ''}
+              {dialogType === 'post' ? (formData.id ? 'Edit Post' : 'Create New Post') : ''}
+              {dialogType === 'user' ? 'Edit User' : ''}
+            </Typography>
+          </Box>
+        </DialogTitle>
+        <DialogContent>
+          {dialogType === 'category' && (
+            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
+              <TextField
+                fullWidth
+                label="Name"
+                value={formData.name || ''}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                margin="normal"
+                required
+              />
+              <TextField
+                fullWidth
+                label="Description"
+                value={formData.description || ''}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                margin="normal"
+                multiline
+                rows={3}
+              />
+            </Box>
+          )}
+          {dialogType === 'post' && (
+            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
+              <Stack spacing={3}>
+                <Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                    <ArticleIcon color="primary" fontSize="small" />
+                    <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                      Post Details
+                    </Typography>
+                  </Box>
+                  <TextField
+                    fullWidth
+                    label="Title"
+                    value={formData.title || ''}
+                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    required
+                    error={!formData.title?.trim()}
+                    helperText={!formData.title?.trim() ? 'Title is required' : ''}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2
+                      }
+                    }}
+                  />
+                </Box>
+
+                <Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                    <CategoryIcon color="primary" fontSize="small" />
+                    <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                      Category
+                    </Typography>
+                  </Box>
+                  <TextField
+                    fullWidth
+                    select
+                    label="Select a category"
+                    value={formData.category || ''}
+                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                    required
+                    error={!formData.category}
+                    helperText={!formData.category ? 'Please select a category' : ''}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2
+                      }
+                    }}
+                  >
+                             {categories.map((category) => (
+                      <MenuItem key={category.id} value={category.id}>
+                        {category.name}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Box>
+
+                <Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                    <PhotoCameraIcon color="primary" fontSize="small" />
+                    <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                      Cover Image
+                    </Typography>
+                  </Box>
+                  <Paper
+                    variant="outlined"
+                    sx={{
+                      p: 3,
+                      borderRadius: 2,
+                      borderStyle: 'dashed',
+                      bgcolor: alpha(theme.palette.primary.main, 0.02),
+                      textAlign: 'center'
+                    }}
+                  >
+                    {imagePreview ? (
+                      <Box>
+                        <Box
+                          sx={{
+                            position: 'relative',
+                            width: '100%',
+                            height: 200,
+                            borderRadius: 2,
+                            overflow: 'hidden',
+                            mb: 2
+                          }}
+                        >
+                          <img
+                            src={imagePreview}
+                            alt="Preview"
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover'
+                            }}
+                            />
