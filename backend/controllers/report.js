@@ -98,3 +98,63 @@ exports.getReports = async (req, res) => {
           attributes: ['id', 'name', 'email']
         }
       ],
+      order: [['createdAt', 'DESC']]
+    });
+
+    res.status(200).json({
+      success: true,
+      data: reports
+    });
+  } catch (error) {
+    console.error('Error fetching reports:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching reports'
+    });
+  }
+};
+
+// @desc    Get single report (admin only)
+// @route   GET /api/v1/reports/:id
+// @access  Private/Admin
+exports.getReport = async (req, res) => {
+  try {
+    const report = await Report.findByPk(req.params.id, {
+      include: [
+        {
+          model: User,
+          as: 'reporter',
+          attributes: ['id', 'name', 'email']
+        }
+      ]
+    });
+
+    if (!report) {
+      return res.status(404).json({
+        success: false,
+        message: 'Report not found'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: report
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+// @desc    Update report status (admin only)
+// @route   PUT /api/v1/reports/:id
+// @access  Private/Admin
+exports.updateReportStatus = async (req, res) => {
+  try {
+    const report = await Report.findByPk(req.params.id);
+
+    if (!report) {
+      return res.status(404).json({
+        success: false,
