@@ -36,6 +36,13 @@ const Register = () => {
     setError('');
     setLoading(true);
 
+    // Validate required fields
+    if (!name.trim() || !email.trim()) {
+      setError('Name and email are required');
+      setLoading(false);
+      return;
+    }
+
     // Validate password length
     if (password.length < 6) {
       setError('Password must be at least 6 characters long');
@@ -43,6 +50,7 @@ const Register = () => {
       return;
     }
 
+    // Validate password match
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       setLoading(false);
@@ -50,13 +58,15 @@ const Register = () => {
     }
 
     try {
-      const response = await register(name, email, password);
-      if (response.data.success) {
+      const response = await register(name.trim(), email.trim(), password);
+      console.log('Register response:', response); // Log the response
+      if (response?.data?.success) {
         navigate('/');
       } else {
-        setError(response.data.message || 'Failed to create an account');
+        setError(response?.data?.message || 'Wait for Admin Approval');
       }
     } catch (err) {
+      console.error('Register error:', err.response?.data || err); // Log the error
       setError(err.response?.data?.message || 'Failed to create an account');
     } finally {
       setLoading(false);
@@ -85,6 +95,9 @@ const Register = () => {
         break;
       case 'email':
         setEmail(value);
+        break;
+      default:
+        console.warn(`Unhandled input field: ${name}`);
         break;
     }
   };
@@ -146,6 +159,7 @@ const Register = () => {
             <TextField
               fullWidth
               label="Name"
+              name="name"
               value={name}
               onChange={handleChange}
               margin="normal"
@@ -160,6 +174,7 @@ const Register = () => {
             <TextField
               fullWidth
               label="Email"
+              name="email"
               type="email"
               value={email}
               onChange={handleChange}
@@ -184,7 +199,11 @@ const Register = () => {
               autoComplete="new-password"
               disabled={loading}
               error={error && error.includes('Password')}
-              helperText={error && error.includes('Password') ? error : 'Password must be at least 6 characters long'}
+              helperText={
+                error && error.includes('Password')
+                  ? error
+                  : 'Password must be at least 6 characters long'
+              }
               InputProps={{
                 startAdornment: <LockIcon sx={{ mr: 1, color: 'text.secondary' }} />
               }}
@@ -202,7 +221,11 @@ const Register = () => {
               autoComplete="new-password"
               disabled={loading}
               error={error && error.includes('Passwords do not match')}
-              helperText={error && error.includes('Passwords do not match') ? error : ''}
+              helperText={
+                error && error.includes('Passwords do not match')
+                  ? error
+                  : 'Re-enter your password to confirm'
+              }
               InputProps={{
                 startAdornment: <LockIcon sx={{ mr: 1, color: 'text.secondary' }} />
               }}
@@ -260,4 +283,4 @@ const Register = () => {
   );
 };
 
-export default Register; 
+export default Register;

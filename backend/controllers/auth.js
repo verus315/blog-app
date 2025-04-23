@@ -39,7 +39,7 @@ exports.register = async (req, res) => {
       password
     });
 
-    // Create token
+    // Generate token
     const token = generateToken(user.id);
 
     res.status(201).json({
@@ -54,9 +54,9 @@ exports.register = async (req, res) => {
     });
   } catch (error) {
     console.error('Registration error:', error);
-    res.status(400).json({
+    res.status(500).json({
       success: false,
-      message: error.message
+      message: 'Server error. Please try again later.'
     });
   }
 };
@@ -159,4 +159,4 @@ exports.getMe = async (req, res) => {
       message: error.message
     });
   }
-}; 
+};
