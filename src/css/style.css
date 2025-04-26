@@ -1,0 +1,363 @@
+:root {
+  /* Color variables */
+  --primary: #0d6efd;
+  --primary-light: #6ea8fe;
+  --primary-dark: #0a58ca;
+  --secondary: #20c997;
+  --secondary-light: #6edcbc;
+  --secondary-dark: #138669;
+  --accent: #6f42c1;
+  --accent-light: #a98eda;
+  --accent-dark: #59359a;
+  --success: #198754;
+  --warning: #ffc107;
+  --danger: #dc3545;
+  --light: #f8f9fa;
+  --dark: #212529;
+  --gray-100: #f8f9fa;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+  --gray-400: #ced4da;
+  --gray-500: #adb5bd;
+  --gray-600: #6c757d;
+  --gray-700: #495057;
+  --gray-800: #343a40;
+  --gray-900: #212529;
+  
+  /* Spacing variables based on 8px system */
+  --space-1: 0.5rem;  /* 8px */
+  --space-2: 1rem;    /* 16px */
+  --space-3: 1.5rem;  /* 24px */
+  --space-4: 2rem;    /* 32px */
+  --space-5: 2.5rem;  /* 40px */
+  
+  /* Typography */
+  --font-heading: 'Poppins', sans-serif;
+  --font-body: 'Roboto', sans-serif;
+
+  /* Dark mode adjustments */
+  color-scheme: light dark;
+}
+
+/* Base styles */
+body {
+  font-family: var(--font-body);
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background-color: var(--light);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  line-height: 1.2;
+  font-weight: 500;
+  margin-bottom: var(--space-2);
+}
+
+/* Dark mode specific styles */
+[data-bs-theme="dark"] {
+  --bs-body-bg: #121212;
+  --bs-body-color: #f8f9fa;
+}
+
+[data-bs-theme="dark"] .card {
+  background-color: #1e1e1e;
+  border-color: #303030;
+}
+
+[data-bs-theme="dark"] .navbar {
+  background-color: #1c1c1c !important;
+}
+
+[data-bs-theme="dark"] body {
+  background-color: var(--dark);
+}
+
+/* Layout components */
+.sidebar {
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  position: relative;
+  z-index: 1020;
+}
+
+/* Card styling */
+.card {
+  margin-bottom: var(--space-3);
+  border-radius: 0.5rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background-color: white;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.card-img-top {
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  height: 200px;
+  object-fit: cover;
+}
+
+/* Avatar styling */
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar-sm {
+  width: 32px;
+  height: 32px;
+}
+
+.avatar-lg {
+  width: 64px;
+  height: 64px;
+}
+
+/* Interaction buttons */
+.btn-interaction {
+  padding: 0.3rem 0.6rem;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+}
+
+.btn-like.active {
+  color: var(--primary);
+}
+
+.btn-comment.active {
+  color: var(--secondary);
+}
+
+.btn-report {
+  color: var(--gray-600);
+}
+
+.btn-report:hover {
+  color: var(--danger);
+}
+
+/* Floating action button */
+.fab {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  transition: transform 0.2s, background-color 0.3s;
+}
+
+.fab:hover {
+  transform: scale(1.1);
+  background: var(--primary-dark);
+}
+
+.fab i {
+  font-size: 24px;
+}
+
+/* Comment section */
+.comment-container {
+  padding-left: var(--space-2);
+  border-left: 2px solid var(--gray-300);
+  margin-left: var(--space-2);
+}
+
+.nested-comment {
+  margin-left: var(--space-3);
+  padding-left: var(--space-2);
+  border-left: 1px solid var(--gray-300);
+}
+
+/* Animation classes */
+.like-animation {
+  animation: pulse 0.4s;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Utilities */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.text-small {
+  font-size: 0.875rem;
+}
+
+.text-smaller {
+  font-size: 0.75rem;
+}
+
+/* Dashboard specific styles */
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.dashboard-content {
+  flex: 1;
+  padding: var(--space-3);
+}
+
+.stat-card {
+  border-radius: 0.5rem;
+  padding: var(--space-2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.stat-card i {
+  font-size: 2rem;
+  margin-bottom: var(--space-1);
+}
+
+/* Mode toggle button */
+.mode-toggle {
+  cursor: pointer;
+  width: 50px;
+  height: 25px;
+  border-radius: 25px;
+  background-color: var(--gray-300);
+  position: relative;
+  transition: background-color 0.3s;
+}
+
+.mode-toggle::after {
+  content: '';
+  position: absolute;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background-color: white;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.3s;
+}
+
+.dark-mode .mode-toggle {
+  background-color: var(--primary);
+}
+
+.dark-mode .mode-toggle::after {
+  transform: translateX(25px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .dashboard-container {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    height: auto;
+    position: relative;
+  }
+  
+  .fab {
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+  }
+}
+
+/* Navbar fixes */
+.navbar {
+  position: relative;
+  z-index: 1030;
+}
+
+.navbar .dropdown-menu {
+  z-index: 1040;
+}
+
+/* Ensure dropdowns are above other content */
+.dropdown-menu {
+  z-index: 1050 !important;
+}
+
+/* Layout */
+.container {
+  max-width: 800px !important;
+  margin: 0 auto;
+  padding: var(--space-2);
+}
+
+/* Right sidebar styles */
+.right-sidebar {
+  position: sticky;
+  top: 1rem;
+  height: calc(100vh - 2rem);
+  overflow-y: auto;
+}
+
+.right-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.right-sidebar::-webkit-scrollbar-track {
+  background: var(--gray-100);
+  border-radius: 3px;
+}
+
+.right-sidebar::-webkit-scrollbar-thumb {
+  background: var(--gray-300);
+  border-radius: 3px;
+}
+
+.right-sidebar::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-400);
+}
+
+/* Quick links */
+.quick-links a {
+  transition: color 0.2s ease;
+}
+
+.quick-links a:hover {
+  color: var(--primary) !important;
+}
+
+/* Dark mode adjustments */
+[data-bs-theme="dark"] .right-sidebar::-webkit-scrollbar-track {
+  background: var(--gray-800);
+}
+
+[data-bs-theme="dark"] .right-sidebar::-webkit-scrollbar-thumb {
+  background: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .right-sidebar::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-600);
+}
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+  .right-sidebar {
+    display: none;
+  }
+}
