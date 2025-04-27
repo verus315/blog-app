@@ -24,7 +24,6 @@ A modern social blogging platform built with vanilla JavaScript and Node.js. Thi
 - 🖼️ Image upload support
 - 💬 Comments and replies
 - ❤️ Like/unlike posts and comments
-- 🚫 Content moderation and reporting
 - 🌓 Light/Dark theme toggle
 - 📱 Responsive design
 
