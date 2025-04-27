@@ -88,7 +88,7 @@ export function renderPrivacy(container) {
                 If you have any questions about our Privacy Policy, please contact our Data Protection Officer:
               </p>
               <ul class="list-unstyled mb-0">
-                <li><i class="fas fa-envelope me-2"></i>Email: privacy@socialblog.com</li>
+                <li><i class="fas fa-envelope me-2"></i>Email: privacy@TarinaSpace.com</li>
                 <li><i class="fas fa-phone me-2"></i>Phone: (555) 123-4567</li>
                 <li><i class="fas fa-map-marker-alt me-2"></i>Address: 123 Social Street, Blog City, BC 12345</li>
               </ul>

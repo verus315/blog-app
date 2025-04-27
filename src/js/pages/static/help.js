@@ -101,7 +101,7 @@ export function renderHelp(container) {
                 If you couldn't find the answer you're looking for, please contact our support team:
               </p>
               <ul class="list-unstyled mb-0">
-                <li><i class="fas fa-envelope me-2"></i>Email: support@socialblog.com</li>
+                <li><i class="fas fa-envelope me-2"></i>Email: support@TarinaSpace.com</li>
                 <li><i class="fas fa-clock me-2"></i>Response time: Within 24 hours</li>
               </ul>
             </div>

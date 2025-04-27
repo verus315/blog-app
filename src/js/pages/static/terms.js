@@ -14,7 +14,7 @@ export function renderTerms(container) {
             <div class="card-body">
               <h5 class="card-title">1. Acceptance of Terms</h5>
               <p class="card-text">
-                By accessing or using SocialBlog, you agree to be bound by these Terms of Service. If you do not agree to these terms, 
+                By accessing or using TarinaSpace, you agree to be bound by these Terms of Service. If you do not agree to these terms, 
                 please do not use our services.
               </p>
             </div>
@@ -92,7 +92,7 @@ export function renderTerms(container) {
                 For questions about these Terms of Service, please contact us:
               </p>
               <ul class="list-unstyled mb-0">
-                <li><i class="fas fa-envelope me-2"></i>Email: legal@socialblog.com</li>
+                <li><i class="fas fa-envelope me-2"></i>Email: legal@TarinaSpace.com</li>
                 <li><i class="fas fa-phone me-2"></i>Phone: (555) 123-4567</li>
                 <li><i class="fas fa-map-marker-alt me-2"></i>Address: 123 Social Street, Blog City, BC 12345</li>
               </ul>

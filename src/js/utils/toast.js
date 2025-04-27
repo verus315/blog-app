@@ -19,7 +19,7 @@ export function showToast(message, type = 'primary') {
   
   toastElement.innerHTML = `
     <div class="toast-header bg-${type} text-${type === 'warning' || type === 'light' ? 'dark' : 'white'}">
-      <strong class="me-auto">SocialBlog</strong>
+      <strong class="me-auto">TarinaSpace</strong>
       <small>Just now</small>
       <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>

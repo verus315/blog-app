@@ -1,4 +1,4 @@
-# SocialBlog
+# TarinaSpace
 
 A modern social blogging platform built with vanilla JavaScript and Node.js. This project demonstrates how to build a full-featured social platform without using any frontend frameworks, relying solely on pure JavaScript, HTML, and CSS.
 
@@ -71,7 +71,7 @@ const pool = mysql.createPool({
   host: 'localhost',
   user: 'your_username',
   password: 'your_password',
-  database: 'socialblog'
+  database: 'TarinaSpace'
 });
 ```
 
@@ -222,4 +222,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Support
 
-For support, email support@socialblog.com or create an issue in the repository. 
+For support, email support@TarinaSpace.com or create an issue in the repository. 

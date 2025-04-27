@@ -97,7 +97,7 @@ export function renderGuidelines(container) {
               <p class="mb-0">
                 <i class="fas fa-question-circle me-2"></i>
                 Questions about these guidelines? Contact our moderation team at 
-                <a href="mailto:moderation@socialblog.com">moderation@socialblog.com</a>
+                <a href="mailto:moderation@TarinaSpace.com">moderation@TarinaSpace.com</a>
               </p>
             </div>
           </div>

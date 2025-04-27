@@ -8,13 +8,13 @@ export function renderAbout(container) {
     <div class="container py-5">
       <div class="row justify-content-center">
         <div class="col-lg-8">
-          <h1 class="mb-4">About SocialBlog</h1>
+          <h1 class="mb-4">About TarinaSpace</h1>
           
           <div class="card mb-4">
             <div class="card-body">
               <h5 class="card-title">Our Mission</h5>
               <p class="card-text">
-                SocialBlog is a platform dedicated to connecting people through meaningful content sharing and discussions. 
+                TarinaSpace is a platform dedicated to connecting people through meaningful content sharing and discussions. 
                 We believe in fostering a community where ideas can be freely exchanged while maintaining respect and civility.
               </p>
             </div>
@@ -50,7 +50,7 @@ export function renderAbout(container) {
                 Have questions or suggestions? We'd love to hear from you!
               </p>
               <ul class="list-unstyled">
-                <li><i class="fas fa-envelope me-2"></i>Email: support@socialblog.com</li>
+                <li><i class="fas fa-envelope me-2"></i>Email: support@TarinaSpace.com</li>
                 <li><i class="fas fa-phone me-2"></i>Phone: (555) 123-4567</li>
                 <li><i class="fas fa-map-marker-alt me-2"></i>Address: 123 Social Street, Blog City, BC 12345</li>
               </ul>

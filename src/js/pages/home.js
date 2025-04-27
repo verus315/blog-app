@@ -174,7 +174,7 @@ export async function renderHome(container) {
                 <span class="text-muted">·</span>
                 <a href="#/guidelines" class="text-decoration-none text-muted small">Guidelines</a>
               </div>
-              <p class="text-muted small mt-2 mb-0">© 2025 SocialBlog. All rights reserved.</p>
+              <p class="text-muted small mt-2 mb-0">© 2025 TarinaSpace. All rights reserved.</p>
             </div>
           </div>
         </div>
@@ -352,7 +352,7 @@ function showToast(message, type = 'primary') {
   
   toastElement.innerHTML = `
     <div class="toast-header bg-${type} text-${type === 'warning' || type === 'light' ? 'dark' : 'white'}">
-      <strong class="me-auto">SocialBlog</strong>
+      <strong class="me-auto">TarinaSpace</strong>
       <small>Just now</small>
       <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>

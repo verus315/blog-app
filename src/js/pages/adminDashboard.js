@@ -423,7 +423,7 @@ export function renderAdminDashboard(container) {
                   <form id="generalSettingsForm">
                     <div class="mb-3">
                       <label for="siteName" class="form-label">Site Name</label>
-                      <input type="text" class="form-control" id="siteName" value="SocialBlog">
+                      <input type="text" class="form-control" id="siteName" value="TarinaSpace">
                     </div>
                     <div class="mb-3">
                       <label for="siteDescription" class="form-label">Site Description</label>
@@ -1146,7 +1146,7 @@ function showToast(message, type = 'primary') {
   
   toastElement.innerHTML = `
     <div class="toast-header bg-${type} text-${type === 'warning' || type === 'light' ? 'dark' : 'white'}">
-      <strong class="me-auto">SocialBlog</strong>
+      <strong class="me-auto">TarinaSpace</strong>
       <small>Just now</small>
       <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>

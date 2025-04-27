@@ -31,7 +31,7 @@ export function renderNavbar() {
   nav.innerHTML = `
     <div class="container">
       <a class="navbar-brand" href="#/">
-        <i class="fas fa-blog me-2"></i>SocialBlog
+        <i class="fas fa-blog me-2"></i>TarinaSpace
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
               aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

@@ -1,7 +1,7 @@
 (function(){const a=document.createElement("link").relList;if(a&&a.supports&&a.supports("modulepreload"))return;for(const n of document.querySelectorAll('link[rel="modulepreload"]'))s(n);new MutationObserver(n=>{for(const i of n)if(i.type==="childList")for(const o of i.addedNodes)o.tagName==="LINK"&&o.rel==="modulepreload"&&s(o)}).observe(document,{childList:!0,subtree:!0});function e(n){const i={};return n.integrity&&(i.integrity=n.integrity),n.referrerPolicy&&(i.referrerPolicy=n.referrerPolicy),n.crossOrigin==="use-credentials"?i.credentials="include":n.crossOrigin==="anonymous"?i.credentials="omit":i.credentials="same-origin",i}function s(n){if(n.ep)return;n.ep=!0;const i=e(n);fetch(n.href,i)}})();const R="http://localhost:3000/api";function f(){return localStorage.getItem("token")!==null}function w(){const t=localStorage.getItem("user");return t?JSON.parse(t):null}function U(){const t=w();return t?t.role:null}async function H(t,a,e){try{const s=await fetch(`${R}/auth/register`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:t,email:a,password:e})}),n=await s.json();if(!s.ok)throw new Error(n.message||"Registration failed");return n}catch(s){throw s}}async function F(t,a){try{const e=await fetch(`${R}/auth/login`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:t,password:a})}),s=await e.json();if(!e.ok)throw new Error(s.message||"Login failed");return localStorage.setItem("token",s.token),localStorage.setItem("user",JSON.stringify(s.user)),s}catch(e){throw e}}function N(){localStorage.removeItem("token"),localStorage.removeItem("user")}function P(t){return/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(t)}function q(t){return/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(t)}let T=!1;function y(){if(T)return;const t=f(),a=t?w():null,e=document.createElement("nav");e.className="navbar navbar-expand-lg navbar-dark bg-primary",e.innerHTML=`
     <div class="container">
       <a class="navbar-brand" href="#/">
-        <i class="fas fa-blog me-2"></i>SocialBlog
+        <i class="fas fa-blog me-2"></i>TarinaSpace
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
               aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -505,7 +505,7 @@
         `}
       `,e.appendChild(s);return}a.forEach(s=>{e.appendChild(S(s))})}catch(t){console.error("Error loading posts:",t),V("Failed to load posts","danger")}}function V(t,a="primary"){let e=document.querySelector(".toast-container");e||(e=document.createElement("div"),e.className="toast-container position-fixed bottom-0 end-0 p-3",e.style.zIndex="1100",document.body.appendChild(e));const s=document.createElement("div");s.className=`toast bg-${a} text-${a==="warning"||a==="light"?"dark":"white"}`,s.setAttribute("role","alert"),s.setAttribute("aria-live","assertive"),s.setAttribute("aria-atomic","true"),s.innerHTML=`
     <div class="toast-header bg-${a} text-${a==="warning"||a==="light"?"dark":"white"}">
-      <strong class="me-auto">SocialBlog</strong>
+      <strong class="me-auto">TarinaSpace</strong>
       <small>Just now</small>
       <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
@@ -1039,7 +1039,7 @@
                   <form id="generalSettingsForm">
                     <div class="mb-3">
                       <label for="siteName" class="form-label">Site Name</label>
-                      <input type="text" class="form-control" id="siteName" value="SocialBlog">
+                      <input type="text" class="form-control" id="siteName" value="TarinaSpace">
                     </div>
                     <div class="mb-3">
                       <label for="siteDescription" class="form-label">Site Description</label>
@@ -1213,7 +1213,7 @@
       </tr>
     `}}function E(t,a="primary"){let e=document.querySelector(".toast-container");e||(e=document.createElement("div"),e.className="toast-container position-fixed bottom-0 end-0 p-3",e.style.zIndex="1100",document.body.appendChild(e));const s=document.createElement("div");s.className=`toast bg-${a} text-${a==="warning"||a==="light"?"dark":"white"}`,s.setAttribute("role","alert"),s.setAttribute("aria-live","assertive"),s.setAttribute("aria-atomic","true"),s.innerHTML=`
     <div class="toast-header bg-${a} text-${a==="warning"||a==="light"?"dark":"white"}">
-      <strong class="me-auto">SocialBlog</strong>
+      <strong class="me-auto">TarinaSpace</strong>
       <small>Just now</small>
       <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
@@ -1710,7 +1710,7 @@
       </div>
     `}}function ct(t,a="primary"){let e=document.querySelector(".toast-container");e||(e=document.createElement("div"),e.className="toast-container position-fixed bottom-0 end-0 p-3",e.style.zIndex="1100",document.body.appendChild(e));const s=document.createElement("div");s.className=`toast bg-${a} text-${a==="warning"||a==="light"?"dark":"white"}`,s.setAttribute("role","alert"),s.setAttribute("aria-live","assertive"),s.setAttribute("aria-atomic","true"),s.innerHTML=`
     <div class="toast-header bg-${a} text-${a==="warning"||a==="light"?"dark":"white"}">
-      <strong class="me-auto">SocialBlog</strong>
+      <strong class="me-auto">TarinaSpace</strong>
       <small>Just now</small>
       <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
