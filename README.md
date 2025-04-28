@@ -20,7 +20,7 @@ A modern social blogging platform built with vanilla JavaScript and Node.js. Thi
 
 - 🔐 User authentication (Login/Register)
 - 👤 User profiles and dashboards
-- 📝 Create, edit, and delete posts
+- 📝 Create posts.
 - 🖼️ Image upload support
 - 💬 Comments and replies
 - ❤️ Like/unlike posts and comments
