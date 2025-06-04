@@ -62,15 +62,16 @@ const pool = mysql.createPool({
 
 ## Running the Application
 
-1. Start the development server:
+1. Start the backend server:
+```bash
+npm start
+```
+
+2. Start the development server:
 ```bash
 npm run dev
 ```
 
-2. Start the backend server:
-```bash
-npm start
-```
 
 3. Access the application:
    - Frontend: http://localhost:5173
