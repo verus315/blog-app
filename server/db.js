@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 const initialConnection = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: 'verus',  // Empty password for XAMPP default configuration
+  password: 'Tuhin111@',  // Empty password for XAMPP default configuration
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
