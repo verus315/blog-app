@@ -29,7 +29,7 @@ async function createDatabase() {
 const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: 'verus',  // Empty password for XAMPP default configuration
+  password: 'Tuhin111@',  // Empty password for XAMPP default configuration
   database: 'social_blog',
   waitForConnections: true,
   connectionLimit: 10,
